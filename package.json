@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --noStackTrace",
-    "test:unit": "jest --watch --silent",
+    "test:unit": "jest --watch --silent -c jest-unit-config.js",
+    "test:integration": "jest --watch --silent -c jest-integration-config.js",
     "test:staged": "jest -o --passWithNoTests --silent --verbose",
     "test:ci": "jest --coverage  --silent --verbose",
     "prepare": "husky install"
