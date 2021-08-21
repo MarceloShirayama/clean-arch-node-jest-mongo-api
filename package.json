@@ -20,5 +20,8 @@
     "eslint-config-standard": "^16.0.3",
     "husky": "^7.0.0",
     "jest": "^27.0.6"
+  },
+  "dependencies": {
+    "validator": "^13.6.0"
   }
 }
