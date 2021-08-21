@@ -7,7 +7,7 @@
     "test": "jest --noStackTrace",
     "test:unit": "jest --watch --silent",
     "test:staged": "jest -o --passWithNoTests --silent --verbose",
-    "test:ci": "jest --coverage",
+    "test:ci": "jest --coverage  --noStackTrace",
     "prepare": "husky install"
   },
   "keywords": [],
