@@ -14,16 +14,34 @@ const makeEncrypter = () => {
   return encrypterSpy
 }
 
+const makeEncrypterWithError = () => {
+  class EncrypterSpy {
+    async compare () {
+      throw new Error()
+    }
+  }
+  return new EncrypterSpy()
+}
+
 const makeTokenGenerator = () => {
-  class TokenGenerator {
+  class TokenGeneratorSpy {
     async generate (userId) {
       this.userId = userId
       return this.accesToken
     }
   }
-  const tokenGeneratorSpy = new TokenGenerator()
+  const tokenGeneratorSpy = new TokenGeneratorSpy()
   tokenGeneratorSpy.accesToken = 'any_token'
   return tokenGeneratorSpy
+}
+
+const makeTokenGeneratorWithError = () => {
+  class TokenGeneratorSpy {
+    async generate () {
+      throw new Error()
+    }
+  }
+  return new TokenGeneratorSpy()
 }
 
 const makeLoadUserByEmailRepository = () => {
@@ -39,6 +57,15 @@ const makeLoadUserByEmailRepository = () => {
     password: 'hashedPassword'
   }
   return loadUserByEmailRepositorySpy
+}
+
+const makeLoadUserByEmailRepositoryWithError = () => {
+  class LoadUserByEmailRepositorySpy {
+    async load () {
+      throw new Error()
+    }
+  }
+  return new LoadUserByEmailRepositorySpy()
 }
 
 const makeSut = () => {
@@ -114,7 +141,7 @@ describe('AuthUseCase', () => {
     expect(accesToken).toBeTruthy()
   })
 
-  it('Should throw error if invalid dependecies are provided', async () => {
+  it('Should throw error if invalid dependencies are provided', async () => {
     const invalid = {}
     const loadUserByEmailRepository = makeLoadUserByEmailRepository()
     const encrypter = makeEncrypter()
@@ -137,6 +164,29 @@ describe('AuthUseCase', () => {
         loadUserByEmailRepository,
         encrypter,
         tokenGenerator: invalid
+      })
+    )
+    for (const sut of suts) {
+      const promise = sut.auth('any_email@mail.com', 'any_password')
+      expect(promise).rejects.toThrow()
+    }
+  })
+
+  it('Should throw error if any dependency throws error', async () => {
+    const loadUserByEmailRepository = makeLoadUserByEmailRepository()
+    const encrypterSpy = makeEncrypter()
+    const suts = [].concat(
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepositoryWithError()
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypterSpy: makeEncrypterWithError()
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypterSpy,
+        tokenGenerator: makeTokenGeneratorWithError()
       })
     )
     for (const sut of suts) {
