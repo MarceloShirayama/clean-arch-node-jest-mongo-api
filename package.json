@@ -5,6 +5,7 @@
   "main": "src/main/index.js",
   "scripts": {
     "start": "node .",
+    "dev": "nodemon .",
     "test": "jest --noStackTrace",
     "test:unit": "jest --watch --silent -c ./jest-unit-config.js",
     "test:integration": "jest --watch --silent -c ./jest-integration-config.js",
@@ -22,7 +23,9 @@
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "husky": "^7.0.0",
-    "jest": "^27.0.6"
+    "jest": "^27.0.6",
+    "nodemon": "^2.0.12",
+    "supertest": "^6.1.6"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
