@@ -5,12 +5,7 @@ const LoadUserByEmailRepository = require('./load-user-by-email-repository')
 let db
 
 const makeSut = () => {
-  const userModel = db.collection('users')
-  const sut = new LoadUserByEmailRepository(userModel)
-  return {
-    sut,
-    userModel
-  }
+  return new LoadUserByEmailRepository()
 }
 
 describe('Load User by Email Repository', () => {
@@ -28,14 +23,14 @@ describe('Load User by Email Repository', () => {
     await MongoHelper.disconnect()
   })
   it('Should return undefined if user is not found', async () => {
-    const { sut } = makeSut()
+    const sut = makeSut()
     const user = await sut.load('invalid_email@mail.com')
     expect(user).toBeUndefined()
   })
 
   it('Should return user if user is found', async () => {
-    const { sut, userModel } = makeSut()
-    const fakeUser = await userModel.insertOne({
+    const sut = makeSut()
+    const fakeUser = await db.collection('users').insertOne({
       email: 'valid_email@mail.com',
       name: 'any_name',
       age: 50,
@@ -47,14 +42,8 @@ describe('Load User by Email Repository', () => {
     expect(user.password).toEqual('hashed_password')
   })
 
-  it('Should throw error if userModel is not provided', async () => {
-    const sut = new LoadUserByEmailRepository()
-    const promise = sut.load('any_email@mail.com')
-    expect(promise).rejects.toThrow()
-  })
-
   it('Should throw error if email is not provided', async () => {
-    const { sut } = makeSut()
+    const sut = makeSut()
     const promise = sut.load()
     expect(promise).rejects.toThrow(new MissingParamError('email'))
   })
