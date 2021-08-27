@@ -14,5 +14,10 @@ module.exports = {
 
   async disconnect () {
     await this.client.close()
+  },
+
+  async getCollection (name) {
+    const collection = await this.db.collection(name)
+    return collection
   }
 }

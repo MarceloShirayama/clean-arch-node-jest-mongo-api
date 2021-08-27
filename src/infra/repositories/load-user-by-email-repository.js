@@ -4,8 +4,8 @@ const MongoHelper = require('../helpers/mongo-helper')
 module.exports = class LoadUserByEmailRepository {
   async load (email) {
     if (!email) throw new MissingParamError('email')
-    const db = await MongoHelper.db
-    const user = await db.collection('users').findOne(
+    const collection = await MongoHelper.getCollection('users')
+    const user = await collection.findOne(
       { email },
       {
         projection: {
