@@ -1,0 +1,60 @@
+### Variables
+@host={{$dotenv SERVER_HOST}}
+@port={{$dotenv SERVER_PORT}}
+@route=api/login
+@url_base=http://{{host}}:{{port}}/{{route}}
+
+### POST Login with valid credentials
+POST {{url_base}}
+Content-Type: application/json
+
+{
+  "email": "mango@gmail.com",
+  "password": "hashed_password"
+}
+
+### POST Login with invalid email
+POST {{url_base}}
+Content-Type: application/json
+
+{
+  "email": "invalid@gmail",
+  "password": "hashed_password"
+}
+
+### POST Login with email not registred
+POST {{url_base}}
+Content-Type: application/json
+
+{
+  "email": "invalid@gmail.com",
+  "password": "hashed_password"
+}
+
+
+
+### POST Login with incorrect password
+POST {{url_base}}
+Content-Type: application/json
+
+{
+  "email": "mango@gmail.com",
+  "password": "invalid_hashed_password"
+}
+
+### POST Login with email is not provided
+POST {{url_base}}
+Content-Type: application/json
+
+{
+  "email": "",
+  "password": "hashed_password"
+}
+
+### POST Login with password is not provided
+POST {{url_base}}
+Content-Type: application/json
+
+{
+  "email": "mango@gmail.com"
+}
