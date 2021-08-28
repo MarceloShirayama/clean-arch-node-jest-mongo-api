@@ -31,8 +31,6 @@ Content-Type: application/json
   "password": "hashed_password"
 }
 
-
-
 ### POST Login with incorrect password
 POST {{url_base}}
 Content-Type: application/json
